@@ -1,0 +1,17 @@
+name: Bug report
+description: Report a reproducible integration problem
+body:
+  - type: textarea
+    id: versions
+    attributes:
+      label: Versions and environment
+      description: Package, Medusa and Node versions; test or production (no secrets).
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Synthetic reproduction and expected behavior
+      description: Do not include customer data, credentials, bank payloads or shipping labels.
+    validations:
+      required: true

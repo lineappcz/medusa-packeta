@@ -1,0 +1,11 @@
+# Packeta for Medusa
+
+> Native Medusa v2 provider and typed API client. See explicit scope before installing.
+
+- [README](README.md): installation and compatibility
+- [Installation](docs/installation.md): configuration and application contract
+- [Architecture](docs/architecture.md): boundaries and invariants
+- [Operations](docs/operations.md): durable storage and ambiguous write recovery
+- [Acceptance](docs/acceptance.md): parity and test evidence
+- [Agents](AGENTS.md): implementation rules and validation commands
+- [Types](src/provider/service.ts): public provider options

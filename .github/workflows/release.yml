@@ -1,0 +1,33 @@
+name: Release
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: release
+  cancel-in-progress: false
+jobs:
+  release:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    services:
+      redis:
+        image: redis:7.4-alpine
+        ports: [6379:6379]
+    env:
+      REDIS_TEST_URL: redis://127.0.0.1:6379
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 22
+      - run: corepack enable && pnpm install --frozen-lockfile
+      - run: pnpm check && pnpm format:check && node scripts/pack-smoke.mjs
+      - run: pnpm pack && sha256sum *.tgz > SHA256SUMS
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(node -p 'require("./package.json").version')
+          gh release create "v$VERSION" *.tgz SHA256SUMS --target "$GITHUB_SHA" --title "v$VERSION" --notes-file CHANGELOG.md
